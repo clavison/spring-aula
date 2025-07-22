@@ -1,6 +1,6 @@
 package br.com.senai.aula.controller;
 
-import br.com.senai.aula.model.Pessoa;
+import br.com.senai.aula.dto.PessoaDTO;
 import br.com.senai.aula.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,18 +19,18 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @PostMapping
-    public ResponseEntity<Pessoa> criar(@RequestBody Pessoa pessoa) {
-        Pessoa salva = pessoaService.salvar(pessoa);
+    public ResponseEntity<PessoaDTO> criar(@RequestBody PessoaDTO pessoa) {
+        PessoaDTO salva = pessoaService.salvar(pessoa);
         return ResponseEntity.status(HttpStatus.CREATED).body(salva);
     }
 
     @GetMapping
-    public List<Pessoa> listar() {
+    public List<PessoaDTO> listar() {
         return pessoaService.listarTodas();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pessoa> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<PessoaDTO> buscarPorId(@PathVariable Long id) {
         return pessoaService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -43,22 +43,22 @@ public class PessoaController {
     }
 
     @GetMapping("/email")
-    public Pessoa buscarPorEmail(@RequestParam String email) {
+    public PessoaDTO buscarPorEmail(@RequestParam String email) {
         return pessoaService.buscarPorEmail(email);
     }
 
     @GetMapping("/nome")
-    public List<Pessoa> buscarPorNome(@RequestParam String nome) {
+    public List<PessoaDTO> buscarPorNome(@RequestParam String nome) {
         return pessoaService.buscarPorNome(nome);
     }
 
     @GetMapping("/nascimento-anterior")
-    public List<Pessoa> buscarPorDataAnterior(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public List<PessoaDTO> buscarPorDataAnterior(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         return pessoaService.buscarPorDataNascimentoAntes(data);
     }
 
     @GetMapping("/cpf")
-    public Pessoa buscarPorCpfDoDocumento(@RequestParam String cpf) {
+    public PessoaDTO buscarPorCpfDoDocumento(@RequestParam String cpf) {
         return pessoaService.buscarPorCpfDoDocumento(cpf);
     }
 }

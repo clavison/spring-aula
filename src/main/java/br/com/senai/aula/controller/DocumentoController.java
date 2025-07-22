@@ -1,5 +1,6 @@
 package br.com.senai.aula.controller;
 
+import br.com.senai.aula.dto.DocumentoDTO;
 import br.com.senai.aula.model.Documento;
 import br.com.senai.aula.service.DocumentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,18 @@ public class DocumentoController {
     private DocumentoService documentoService;
 
     @PostMapping
-    public ResponseEntity<Documento> criar(@RequestBody Documento documento) {
-        Documento salvo = documentoService.salvar(documento);
+    public ResponseEntity<DocumentoDTO> criar(@RequestBody DocumentoDTO documento) {
+        DocumentoDTO salvo = documentoService.salvar(documento);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
     @GetMapping
-    public List<Documento> listar() {
+    public List<DocumentoDTO> listar() {
         return documentoService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Documento> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<DocumentoDTO> buscarPorId(@PathVariable Long id) {
         return documentoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -41,17 +42,17 @@ public class DocumentoController {
     }
 
     @GetMapping("/cpf")
-    public Documento buscarPorCpf(@RequestParam String cpf) {
+    public DocumentoDTO buscarPorCpf(@RequestParam String cpf) {
         return documentoService.buscarPorCpf(cpf);
     }
 
     @GetMapping("/rg")
-    public Documento buscarPorRg(@RequestParam String rg) {
+    public DocumentoDTO buscarPorRg(@RequestParam String rg) {
         return documentoService.buscarPorRg(rg);
     }
 
     @GetMapping("/pessoa-nome")
-    public List<Documento> buscarPorNomeDaPessoa(@RequestParam String nome) {
+    public List<DocumentoDTO> buscarPorNomeDaPessoa(@RequestParam String nome) {
         return documentoService.buscarPorNomeDaPessoa(nome);
     }
 }

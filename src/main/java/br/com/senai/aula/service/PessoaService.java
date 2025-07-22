@@ -1,5 +1,7 @@
 package br.com.senai.aula.service;
 
+import br.com.senai.aula.dto.PessoaDTO;
+import br.com.senai.aula.dto.mapper.PessoaMapper;
 import br.com.senai.aula.model.Pessoa;
 import br.com.senai.aula.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
@@ -15,38 +18,52 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public Pessoa salvar(Pessoa pessoa) {
+    public PessoaDTO salvar(PessoaDTO pessoaDTO) {
+        Pessoa pessoa = PessoaMapper.toEntity(pessoaDTO);
         if (pessoa.getDocumento() != null) {
             pessoa.getDocumento().setPessoa(pessoa);
         }
-        return pessoaRepository.save(pessoa);
+        Pessoa salva = pessoaRepository.save(pessoa);
+        return PessoaMapper.toDTO(salva);
     }
 
-    public List<Pessoa> listarTodas() {
-        return pessoaRepository.findAll();
+    public List<PessoaDTO> listarTodas() {
+        return pessoaRepository.findAll()
+                .stream()
+                .map(PessoaMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Pessoa> buscarPorId(Long id) {
-        return pessoaRepository.findById(id);
+    public Optional<PessoaDTO> buscarPorId(Long id) {
+        return pessoaRepository.findById(id)
+                .map(PessoaMapper::toDTO);
     }
 
     public void excluir(Long id) {
         pessoaRepository.deleteById(id);
     }
 
-    public Pessoa buscarPorEmail(String email) {
-        return pessoaRepository.findByEmail(email);
+    public PessoaDTO buscarPorEmail(String email) {
+        Pessoa pessoa = pessoaRepository.findByEmail(email);
+        return PessoaMapper.toDTO(pessoa);
     }
 
-    public List<Pessoa> buscarPorNome(String nome) {
-        return pessoaRepository.findByNomeLike("%" + nome + "%");
+    public List<PessoaDTO> buscarPorNome(String nome) {
+        return pessoaRepository.findByNomeLike("%" + nome + "%")
+                .stream()
+                .map(PessoaMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Pessoa> buscarPorDataNascimentoAntes(LocalDate data) {
-        return pessoaRepository.findPessoasNascidasAntesDe(data);
+    public List<PessoaDTO> buscarPorDataNascimentoAntes(LocalDate data) {
+        return pessoaRepository.findPessoasNascidasAntesDe(data)
+                .stream()
+                .map(PessoaMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Pessoa buscarPorCpfDoDocumento(String cpf) {
-        return pessoaRepository.findByCpfDoDocumento(cpf);
+    public PessoaDTO buscarPorCpfDoDocumento(String cpf) {
+        Pessoa pessoa = pessoaRepository.findByCpfDoDocumento(cpf);
+        return PessoaMapper.toDTO(pessoa);
     }
 }
