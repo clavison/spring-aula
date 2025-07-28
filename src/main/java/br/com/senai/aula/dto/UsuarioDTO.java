@@ -1,27 +1,37 @@
 package br.com.senai.aula.dto;
 
+import java.util.Set;
+
 public class UsuarioDTO {
+    private String username;
+    private String password;
 
-    private String nome;
-    private String email;
-    private String senha;
+    private Set<String> roles;
 
-    public UsuarioDTO(String nome, String email, String senha) {
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
+    //gets e sets
+
+
+    public String getUsername() {
+        return username;
     }
 
-
-    public String getNome() {
-        return nome;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPassword() {
+        return password;
     }
 
-    public String getSenha() {
-        return senha;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 }
