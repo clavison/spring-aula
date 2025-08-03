@@ -3,6 +3,7 @@ package br.com.senai.aula.controller;
 import br.com.senai.aula.dto.AuthRequestDTO;
 import br.com.senai.aula.dto.AuthResponseDTO;
 import br.com.senai.aula.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -32,6 +34,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequestDTO request) {
+        log.info("Tentativa de login para usuário: {}", request.getUsername());
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -39,6 +42,7 @@ public class AuthController {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
             String token = jwtUtil.generateToken(userDetails);
+            log.info("Token gerado com sucesso para usuário: {}", request.getUsername());
             return ResponseEntity.ok(new AuthResponseDTO(token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
