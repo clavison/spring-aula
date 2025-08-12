@@ -2,7 +2,6 @@ package br.com.senai.aula.config;
 
 import br.com.senai.aula.repository.UsuarioRepository;
 import br.com.senai.aula.util.JwtAuthFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
