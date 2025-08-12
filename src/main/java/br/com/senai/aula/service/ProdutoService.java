@@ -1,5 +1,7 @@
 package br.com.senai.aula.service;
 
+import br.com.senai.aula.dto.ProdutoFiltroDTO;
+import br.com.senai.aula.dto.specifications.ProdutoSpecification;
 import br.com.senai.aula.model.Produto;
 import br.com.senai.aula.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,10 @@ public class ProdutoService {
     public Page<Produto> getProdutosPaginados(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return produtoRepository.findAll(pageable);
+    }
+
+    public Page<Produto> listarComFiltros(ProdutoFiltroDTO filtro, Pageable pageable) {
+        return produtoRepository.findAll(ProdutoSpecification.comFiltros(filtro), pageable);
     }
 
     public Produto create(Produto produto) {
